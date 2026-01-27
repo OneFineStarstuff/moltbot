@@ -205,7 +205,7 @@ export async function handleGoogleChatWebhookRequest(
       user: chat.user,
       eventTime: chat.eventTime,
     };
-    
+
     // For Add-ons, the bearer token may be in authorizationEventObject.systemIdToken
     const systemIdToken = rawObj.authorizationEventObject?.systemIdToken;
     if (!bearer && systemIdToken) {

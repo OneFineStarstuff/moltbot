@@ -284,7 +284,7 @@ function combineDebounceEntries(entries: BlueBubblesDebounceEntry[]): Normalized
   // Combine text from all entries, filtering out duplicates and empty strings
   const seenTexts = new Set<string>();
   const textParts: string[] = [];
-  
+
   for (const entry of entries) {
     const text = entry.message.text.trim();
     if (!text) continue;
@@ -383,10 +383,10 @@ function getOrCreateDebouncer(target: WebhookTarget) {
     },
     onFlush: async (entries) => {
       if (entries.length === 0) return;
-      
+
       // Use target from first entry (all entries have same target due to key structure)
       const flushTarget = entries[0].target;
-      
+
       if (entries.length === 1) {
         // Single message - process normally
         await processMessage(entries[0].message, flushTarget);
@@ -395,7 +395,7 @@ function getOrCreateDebouncer(target: WebhookTarget) {
 
       // Multiple messages - combine and process
       const combined = combineDebounceEntries(entries);
-      
+
       if (core.logging.shouldLogVerbose()) {
         const count = entries.length;
         const preview = combined.text.slice(0, 50);
@@ -403,7 +403,7 @@ function getOrCreateDebouncer(target: WebhookTarget) {
           `[bluebubbles] coalesced ${count} messages: "${preview}${combined.text.length > 50 ? "..." : ""}"`,
         );
       }
-      
+
       await processMessage(combined, flushTarget);
     },
     onError: (err) => {
