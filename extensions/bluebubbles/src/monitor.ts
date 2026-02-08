@@ -268,7 +268,12 @@ const DEFAULT_INBOUND_DEBOUNCE_MS = 350;
 
 /**
  * Combines multiple debounced messages into a single message for processing.
- * Used when multiple webhook events arrive within the debounce window.
+ *
+ * This function processes an array of BlueBubblesDebounceEntry objects, merging their text, attachments, and timestamps while filtering out duplicates and empty strings. It also preserves the reply context from the entries and ensures that the combined message is coherent and complete. If no entries are provided, an error is thrown.
+ *
+ * @param entries - An array of BlueBubblesDebounceEntry objects to be combined.
+ * @returns A NormalizedWebhookMessage that represents the combined message.
+ * @throws Error If the input array of entries is empty.
  */
 function combineDebounceEntries(entries: BlueBubblesDebounceEntry[]): NormalizedWebhookMessage {
   if (entries.length === 0) {
@@ -352,6 +357,14 @@ function resolveBlueBubblesDebounceMs(
 
 /**
  * Creates or retrieves a debouncer for a webhook target.
+ *
+ * This function checks if a debouncer already exists for the given target. If it does, it returns the existing debouncer.
+ * If not, it creates a new debouncer using the target's account, config, runtime, and core. The debouncer processes
+ * messages based on specific criteria, such as skipping debouncing for messages with attachments or control commands,
+ * and handles both single and multiple messages during the flush operation.
+ *
+ * @param target - The WebhookTarget for which the debouncer is created or retrieved.
+ * @returns The debouncer associated with the specified target.
  */
 function getOrCreateDebouncer(target: WebhookTarget) {
   const existing = targetDebouncers.get(target);

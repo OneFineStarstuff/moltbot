@@ -149,6 +149,18 @@ function normalizeAudienceType(value?: string | null): GoogleChatAudienceType | 
   return undefined;
 }
 
+/**
+ * Handle incoming Google Chat webhook requests.
+ *
+ * This function processes the webhook request by validating the request method,
+ * extracting and transforming the payload, and verifying the authorization.
+ * It then processes the event and updates the status sink for the selected target.
+ * If any validation fails, it responds with the appropriate HTTP status code and message.
+ *
+ * @param req - The incoming HTTP request object.
+ * @param res - The outgoing HTTP response object.
+ * @returns A promise that resolves to a boolean indicating the success of the operation.
+ */
 export async function handleGoogleChatWebhookRequest(
   req: IncomingMessage,
   res: ServerResponse,
